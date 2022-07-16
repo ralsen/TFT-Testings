@@ -95,7 +95,7 @@ void loop() {
   // a single pixel
   Serial.println("tft.drawPixel(tft.width()/2, tft.height()/2, ST77XX_GREEN);");
   tft.drawPixel(tft.width()/2, tft.height()/2, ST77XX_GREEN);
-  delay(1000);
+  delay(2000);
 
   // line draw test
   Serial.println("testlines(ST77XX_YELLOW);");
