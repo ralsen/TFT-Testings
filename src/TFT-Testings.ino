@@ -72,16 +72,37 @@ void setup(void) {
 
 }
 
+int i = 0;
+#define COLOR 0xfd20
+
+/*
+...and for 24-bit to 16-bit :
+
+R5 = (R8 * 249 + 1014) >> 11;
+G6 = (G8 * 253 + 505) >> 10;
+B5 = (B8 * 249 + 1014) >> 11;
+*/
+
 void loop() {
+  
   uint16_t time = millis();
-  tft.fillScreen(ST77XX_BLACK);
+  tft.fillScreen(COLOR);
   time = millis() - time;
 
+  tft.setCursor(0,0);
+
+  while(1){
+    tft.setCursor(0,0);
+    tft.setTextColor(ST7735_WHITE, COLOR);
+    tft.print("loop count: ");
+    tft.println(i++);
+    delay(1000);
+  }
   Serial.print("running for ");
   Serial.print(millis()/1000);
   Serial.println(" seconds");
   // large block of text
-  Serial.println("tft.fillScreen(ST77XX_BLACK)");
+  //Serial.println("tft.fillScreen(ST77XX_BLACK)");
   tft.fillScreen(ST77XX_BLACK);
 //  testdrawtext("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ", ST77XX_WHITE);
   testdrawtext("Dieses Display ist nicht sehr groß aber es passen do so einige Zeichen mehr drauf als auf simple LED-Matrixanzeigen. Und Außerdem kann es auch noch alles so schön bunt. Mal sehen wieviel tolle neue Sachen mir dazu einfallen. Als erstes mach ich vielleicht ein Aquariumthermometer mit WLAN. Und dann liegen hier ja noch die Luftqualitätssensoren rum. Damit mus ich ja auch noch was machen.", ST77XX_WHITE);
