@@ -41,8 +41,8 @@
   // For the breakout board, you can use any 2 or 3 pins.
   // These pins will also work for the 1.8" TFT shield.
 #define TFT_CS        4
-#define TFT_RST       5 // Or set to -1 and connect to Arduino RESET pin
-#define TFT_DC        2
+#define TFT_RST       16 // Or set to -1 and connect to Arduino RESET pin
+#define TFT_DC        15
 // initialize ST7735 TFT library with hardware SPI module
 //SCK (CLK) ---> NodeMCU pin D5 (GPIO14)
 //MOSI(DIN) ---> NodeMCU pin D7 (GPIO13)
@@ -72,9 +72,6 @@ void setup(void) {
 
 }
 
-int i = 0;
-#define COLOR 0xfd20
-
 /*
 ...and for 24-bit to 16-bit :
 
@@ -83,19 +80,53 @@ G6 = (G8 * 253 + 505) >> 10;
 B5 = (B8 * 249 + 1014) >> 11;
 */
 
+int i = 10;
+char buf[80];
+
+#define BG_COLOR          0xfd20
+#define TEXT_COLOR        ST7735_WHITE
+#define VALUE_TEXT_COLOR  ST7735_WHITE
+#define VALUE_BG_COLOR    ST7735_BLUE
+#define HEAD_TEXT_SIZE    1
+#define VALUE_TEXT_SIZE   5
+
 void loop() {
   
   uint16_t time = millis();
-  tft.fillScreen(COLOR);
+  tft.fillScreen(BG_COLOR);
   time = millis() - time;
 
   tft.setCursor(0,0);
+  tft.setTextSize(2);
+  tft.setRotation(1);
+
+  tft.fillRoundRect(4, 8, 152, 52, 5, VALUE_BG_COLOR);
+  tft.fillRoundRect(4, 69, 152, 52, 5, VALUE_BG_COLOR);
 
   while(1){
-    tft.setCursor(0,0);
-    tft.setTextColor(ST7735_WHITE, COLOR);
-    tft.print("loop count: ");
-    tft.println(i++);
+    tft.setCursor(45,4);
+    tft.setTextColor(TEXT_COLOR, BG_COLOR);
+    tft.setTextSize(HEAD_TEXT_SIZE);
+    tft.println(" Wohnzimmer ");
+
+    tft.setCursor(22,17);
+    tft.setTextColor(VALUE_TEXT_COLOR, VALUE_BG_COLOR);
+    tft.setTextSize(VALUE_TEXT_SIZE);
+    sprintf(buf,"%i%cC", i++, 0xf7);
+    tft.println(buf);
+
+    tft.setCursor(50,65);
+    tft.setTextColor(TEXT_COLOR, BG_COLOR);
+    tft.setTextSize(HEAD_TEXT_SIZE);
+    tft.println(" Aquarium ");
+
+    tft.setCursor(20, 78);
+    tft.setTextColor(VALUE_TEXT_COLOR, VALUE_BG_COLOR);
+    tft.setTextSize(VALUE_TEXT_SIZE);
+    sprintf(buf,"%i%cC", abs(i-109), 0xf7);
+    tft.println(buf);
+
+    if(i>99) i=10;
     delay(1000);
   }
   Serial.print("running for ");
