@@ -83,16 +83,23 @@ B5 = (B8 * 249 + 1014) >> 11;
 int i = 10;
 char buf[80];
 
-#define BG_COLOR          0xfd20
+
+//#define BG_COLOR          0xfd20
+#define BG_COLOR          0xad55
 #define TEXT_COLOR        ST7735_WHITE
+
 #define VALUE_TEXT_COLOR  ST7735_WHITE
-#define VALUE_BG_COLOR    ST7735_BLUE
+
+//#define VALUE_BG_COLOR    ST7735_BLUE
+#define VALUE_BG_COLOR    0x0617
+
 #define HEAD_TEXT_SIZE    1
 #define VALUE_TEXT_SIZE   5
 
 void loop() {
   
   uint16_t time = millis();
+
   tft.fillScreen(BG_COLOR);
   time = millis() - time;
 
@@ -104,8 +111,14 @@ void loop() {
   tft.fillRoundRect(4, 69, 152, 52, 5, VALUE_BG_COLOR);
 
   while(1){
+    Serial.println(i%2);
     tft.setCursor(45,4);
-    tft.setTextColor(TEXT_COLOR, BG_COLOR);
+    if (i%2){
+      tft.setTextColor(TEXT_COLOR, BG_COLOR);
+    }
+    else{
+      tft.setTextColor(BG_COLOR, TEXT_COLOR);
+    }
     tft.setTextSize(HEAD_TEXT_SIZE);
     tft.println(" Wohnzimmer ");
 
@@ -116,11 +129,16 @@ void loop() {
     tft.println(buf);
 
     tft.setCursor(50,65);
-    tft.setTextColor(TEXT_COLOR, BG_COLOR);
+    if (i%2){
+      tft.setTextColor(TEXT_COLOR, BG_COLOR);
+    }
+    else{
+      tft.setTextColor(BG_COLOR, TEXT_COLOR);
+    }
     tft.setTextSize(HEAD_TEXT_SIZE);
     tft.println(" Aquarium ");
 
-    tft.setCursor(20, 78);
+    tft.setCursor(22, 78);
     tft.setTextColor(VALUE_TEXT_COLOR, VALUE_BG_COLOR);
     tft.setTextSize(VALUE_TEXT_SIZE);
     sprintf(buf,"%i%cC", abs(i-109), 0xf7);
